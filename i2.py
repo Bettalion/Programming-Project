@@ -1,0 +1,293 @@
+import random
+import time
+
+class player:
+ def __init__(self,name,password):
+  self.name=name
+  self.password=password
+  pass
+#  def card_drawn(self):
+#    self.deck.pop(0)
+
+#class atributtes
+# name,pasword,score,deck,cards
+
+#player declarations
+# name,password
+amogh=player('Amogh','1')
+simha=player('Simha','2')
+#when using set the name to p1 or p2 respectively
+
+#makecards
+# deck=list(gen())
+# deck1=deck[:len(deck)]
+# deck2=deck[len(deck):]
+
+players={
+ 'amogh':amogh,
+ 'simha':simha
+}
+
+def as_deck():		# creates full deck
+ adeck=[]
+ deck=[]
+ for x in range(1,11):
+  adeck.append(str(x)+"R")
+  adeck.append(str(x)+"Y")
+  adeck.append(str(x)+"B")
+ for a in adeck:	#.   ensures all ellements are same. lleenth (so can access colour)
+  #print(len(a))
+  if len(a)==2:
+   deck.append('0'+a)
+  elif len(a)==3:
+   deck.append(a)
+  else:
+   print('error')
+ #print(len(deck))
+# print(deck)
+ return deck
+  
+def gen():			#shuffles deck
+  deck=as_deck()
+  while len(deck)>0:
+    card=random.choice(deck)
+    # print(pos)
+    yield card
+    deck.remove(card)
+
+def mechanics(p1T,p2T):
+ p1Num=p1T[:2]	  #player 1 number
+ p1Col=p1T[2]	   #player 1 col
+ # print(p1T,p1Num,p1Col)
+ p2Num=p2T[:2]	  #player 1 number
+ p2Col=p2T[2]	   #player 1 col
+ # print(p2T,p2Num,p2Col)
+ 
+ #number theory
+ if p1Col == p2Col:
+  if p1Num > p2Num:
+   print('\nplayer 1 wins both cards')
+   return 1 #.			returns winner of round
+  if p1Num < p2Num:
+   print('\nplayer 2 wins both cards')
+   return 2
+   
+   #colour theory
+ else:
+  if p1Col=='R' and p2Col=='B':
+   print('\nplayer 1 wins both cards\n')
+   return 1
+  elif p1Col=='Y' and p2Col=='R':
+   print('\nplayer 1 wins both cards\n')
+   return 1
+  elif p1Col=='B' and p2Col=='Y':
+   print('\nplayer 1 wins both cards\n')
+   return 1
+  else:
+   print('\nplayer 2 wins both cards\n')
+   return 2
+ 
+def dots(ending=0,timer=0.12,count=2):
+ for x in range(count):
+  time.sleep(timer)
+  print('.',end='')
+  time.sleep(timer)
+  timer/=2
+ if ending==1:
+  print('\n')
+ else:
+  print(' ')
+
+def instructions(known=True): #complete instructions #sequenced text?
+ if known==False:
+  instructions='''
+  When it is your turn, press any key to draw a card.
+  When your turn is over,it immediately goes to the next player.
+  The winner of the round will then be displayed.
+  Repeat this untill the final scores have been released.
+  Have fun playing The Card Game\n'''
+  print(instructions)
+
+def play(p1,p2):	   # game start
+ # input('Would you like the instructions?(Y/N)').lower() == 'y':
+ #  instructions(False)
+ print('\nLoading  deck',end=".")
+ dots()
+ print('Shufling deck',end=".")
+ dots()
+ print('Starting game',end=".")
+ dots(1)
+ print('')
+ #print(deck) #test deck
+ p1w=0
+ p2w=0
+ p1cards=[]
+ p2cards=[]
+ counter=len(p1.deck)+len(p2.deck)
+ while counter!=0:
+  tempcards=[]
+  # input('It is player 1\'s go:')
+  print("player 1's card is",p1.deck[0]) #########
+  tempcards.append(p1.deck[0])
+  p1T=p1.deck[0]
+  p1.deck.pop(0)
+  # input('It is player 2\'s go:')
+  print(f"player 2's card is {p2.deck[0]}")###########
+  tempcards.append(p2.deck[0])
+  p2T=p2.deck[0]
+  p2.deck.pop(0)
+  rwinner=mechanics(p1T,p2T)
+  if rwinner==1:
+   p1w+=2
+   p1cards.append(tempcards[0])
+   p1cards.append(tempcards[1])
+  elif rwinner==2:
+   p2w+=2
+   p2cards.append(tempcards[0])
+   p2cards.append(tempcards[1])
+  counter=len(p1.deck)+len(p2.deck)
+ # print(p1w,p2w)
+ print('The Game has finnished')
+ setattr(p1,'score',p1w)
+ setattr(p2,'score',p2w)
+ setattr(p1,'cards',p1cards)
+ setattr(p2,'cards',p2cards)
+#  games={
+# 	  p1:p1w,
+# 	  p2:p2w
+#  }
+ # print(games,games[p1]) #
+ # print(p1cards,p2cards)
+ # return games #.   returns name and score
+
+def top5(result_type=1):
+  if result_type==1:
+    file='Winning Results.txt'
+  else:
+    file='Overall Results.txt'
+  try:
+    results=open(file,'r')
+    content=(results.read())
+    content=content.split(';\n')
+    content=content[:len(content)-1]
+    # print(content)
+    #bubblesort
+    n = len(content) 
+    sortedlist=content #to sort
+    for result in range(n-1): 
+     for j in range(0, n-result-1): 
+      # print(sortedlist[j][len(sortedlist[j])-2:])
+      if sortedlist[j][len(sortedlist[j])-2:] > sortedlist[j+1][len(sortedlist[j+1])-2:] : 
+          sortedlist[j], sortedlist[j+1] = sortedlist[j+1], sortedlist[j]
+    # print(sortedlist)
+    if len(sortedlist) >= 5:
+      returnvalue=[sortedlist[len(sortedlist)-5:],sortedlist]
+      return returnvalue
+    else:
+      returnvalue=[_,sortedlist]
+      return returnvalue
+  except:
+    raise SyntaxError#sorting didnt work
+
+
+
+def storage(winnerp,otherp): #strores results in an external file
+ #contains the winners results
+ try:
+  results=open('Winning Results.txt','a')
+ except:
+  results=open('Winning Results.txt','w')
+ results.write(str(winnerp.name))
+ results.write(' ')
+ results.write(str(winnerp.score))
+ results.write(';\n')
+ results.close()
+ #contains the results of the winner and other players
+ try:
+  results=open('Overall Results.txt','a')
+ except:
+  results=open('Overall Results.txt','w')
+ results.write(str(winnerp.name))
+ results.write(' ')
+ if len(str(winnerp.score))==2:
+   gameswon=str(winnerp.score)
+ elif len(str(winnerp.score))==1:
+   gameswon='0'+str(winnerp.score)
+ results.write(gameswon)
+ results.write(';\n')
+ if len(str(otherp.score))==2:
+   gameswon=str(otherp.score)
+ elif len(str(otherp.score))==1:
+   gameswon='0'+str(otherp.score)
+ results.write(otherp.name)
+ results.write(' ')
+ results.write(gameswon)
+ results.write(';')
+ results.write('\n')
+ results.close()
+
+ #verifys person
+def verify():					   
+ p1=input('Enter your name player 1').lower()
+ p2=input('Enter your name player 2').lower()
+ try:
+   p1=players[p1]
+   p2=players[p2]
+ except:
+   print('Unouthorised Name')
+   time.sleep(2)
+   return False
+ Gpas1=input(f'Enter your pasword {p1.name}:')
+ Gpas2=input(f'Enter your pasword {p2.name}:')
+ if p1.password!=Gpas1 or p2.password!=Gpas2:
+   time.sleep(2)
+   print("Incorrect password")
+   return False
+ else:
+   time.sleep(1)
+   print("Autorised entry")
+   returnvalue=[p1,p2]
+   return returnvalue
+ 
+def main(players):	#main start
+  p1='amogh'
+  p2='simha'
+ # # print('welcome to The Card Game')
+ #  result=verify()
+ #  if result==False:
+ #   main(players)
+ #  else:
+ #   p1,p2=result
+ #  # print(p1,p2)
+  p1=players[p1]
+  p2=players[p2]
+  deck=list(gen())
+  deck1=deck[:len(deck)//2]
+  deck2=deck[len(deck)//2:] 
+  setattr(p1,'deck',deck1)
+  setattr(p2,'deck',deck2)
+  play(p1,p2)
+  if p1.score>p2.score:
+   print(f'\n	player 1 "{p1.name}" has won this game with {p1.score} cards!\n\nTheir cards include:')
+   time.sleep(2)
+   [print(card) for card in p1.cards]
+   storage(p1,p2)
+  if p1.score<p2.score:
+   print(f'\n	player 2 "{p2.name}" has won this game with {p2.score} cards!\n\nTheir cards include:')
+   time.sleep(2)
+   [print(card) for card in p2.cards]
+   storage(p2,p1)
+  print('The top 5 results for The Card Game are:')
+  time.sleep(1)
+  [print(f' -{result}') for result in top5()[0]]
+  if input('Do you want to see the rest of the leader board? (y/n)\n').lower() =='y': 
+   results=open('Overall Results.txt','r')
+  # #  print(results.read())
+   results.close()
+   print('Leader Board:')
+   [print(f' +{result}') for result in top5(0)[1]]
+   pass
+  print('Well Done!\nThanks for playing The Card Game')
+  
+#play(1,2) # testing game
+main(players)
