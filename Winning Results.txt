@@ -1,0 +1,16 @@
+Simha 78;
+Amogh 04;
+fg 99;
+Simha 18;
+Simha 16;
+Simha 20;
+Amogh 18;
+d 56;
+Simha 18;
+Amogh 90;
+Amogh 18;
+Simha 18;
+Amogh 16;
+Amogh 20;
+Amogh 24;
+Amogh 18;
