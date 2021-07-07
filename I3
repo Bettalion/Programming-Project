@@ -2,6 +2,7 @@ import random
 import time
 import tkinter as tk
 
+
 class GUI:
     def __init__(self, master):
         self.master = master
